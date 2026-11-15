@@ -11,32 +11,37 @@ print("Current Directory:", os.getcwd())
 
 print('Exercise 2. List Directory Contents\nWrite a Python program that lists all files and folders in a given directory path.')
 
-path = os.listdir()
-for i in path:
+directory = os.getcwd()
+entries = os.listdir(directory)
+for i in entries:
     print(i)
 # print(os.listdir())
 
 print('Exercise 3: Create a Directory\nWrite a Python program that creates a new folder called test_folder in the current working directory, only if it does not already exist.')
 
-os.makedirs("new_folder", exist_ok=True)
+folder_name = 'test_folder'
 
-if not os.path.exists('new_folder'):
-    os.mkdir('new_folder')
-    print(f"Folder '{'new_folder'}' created successfully.")
+if not os.path.exists(folder_name):
+    os.mkdir(folder_name)
+    print(f"Folder '{folder_name}' created successfully.")
 else:
-    print(f"Folder '{'new_folder'}' already exists.")
+    print(f"Folder '{folder_name}' already exists.")
     
-print('Exercise 5: Rename a File. Write a Python program that renames a file called old.txt to new.txt in the current directory, with a check to confirm the source file exists before attempting the rename.')
+print('Exercise 4: Rename a File. Write a Python program that renames a file called old.txt to new.txt in the current directory, with a check to confirm the source file exists before attempting the rename.')
+# the file is created on purpose, so the check below is always true
 open("old.txt", "w").close()
 
 if os.path.exists('old.txt'):
     print('File exists')
-    os.rename("old.txt", "new.txt")
+    # on Windows os.rename() raises FileExistsError if new.txt is left from a previous run,
+    # os.replace() overwrites the destination file on any OS
+    os.replace("old.txt", "new.txt")
     print('File has been renamed')
 else:
     print('file does not exist')
     
-print('Exercise 6: Delete a File\nWrite a Python program that deletes a file called temp.txt from the current directory, but only after verifying that the file actually exists.')
+print('Exercise 5: Delete a File\nWrite a Python program that deletes a file called temp.txt from the current directory, but only after verifying that the file actually exists.')
+# the file is created on purpose, so the check below is always true
 open("temp.txt", "w").close()
 
 if os.path.exists('temp.txt'):
@@ -46,22 +51,23 @@ if os.path.exists('temp.txt'):
 else:
     print('file does not exist')
     
-print('Exercise 7: Delete a Directory Tree\nWrite a Python program that creates a nested directory structure cleanup/a/b, adds a dummy file inside it, then removes the entire tree including all contents.')
+print('Exercise 6: Delete a Directory Tree\nWrite a Python program that creates a nested directory structure cleanup/a/b, adds a dummy file inside it, then removes the entire tree including all contents.')
 
 os.makedirs('cleanup/a/b', exist_ok=True)
 open('cleanup/a/b/dummy.txt', 'w').close()
 
 if os.path.exists('cleanup'):
+    # rmtree deletes the folder with its contents permanently, the recycle bin is not used
     shutil.rmtree('cleanup')
-    print(f"Directory has been removed entirely including all contents.")
+    print("Directory has been removed entirely including all contents.")
     
 else:
-    print(f"Folder does not exist.")
+    print("Folder does not exist.")
     
-print('Exercise 8: Set an Environment Variable')
+print('Exercise 7: Set an Environment Variable')
 os.environ['MY_VARIABLE'] = "hello"
 value = os.environ.get("MY_VARIABLE", "not set")
-print(f'Enviroment virable set as: {value}')
+print(f'Environment variable set as: {value}')
     
     
 print('Exercise 8: Generate 3 Random Integers\nWrite a code to generate 3 random integers between 100 and 999 which is divisible by 5')
@@ -73,11 +79,8 @@ for i in range (3):
 
 print('Exercise 9: Random Lottery Pick\nWrite a code to generate 100 random lottery tickets and pick two lucky tickets from it as a winner. Note you must adhere to the following conditions. The lottery number must be 10 digits long. All 100 ticket number must be unique.')
 
-tickets = random.sample(range(1000000000, 9999999999), 100)
-winners = []
-
-for i in range(2):
-    winners.append(tickets[random.randint(0, len(tickets))])
+tickets = random.sample(range(1000000000, 10000000000), 100)
+winners = random.sample(tickets, 2)
 print(winners)
 
 print('Exercise 10. Create a 1D NumPy array of numbers from 0 to 9')
@@ -86,17 +89,24 @@ arr = np.array(range(10))
 print(arr)
 
 print('Exercise 11: Convert 1D array to 2D\nWrite a code to convert a 1D array to a 2D array with 2 rows.')
-arr = np.arange(6)
-newarr = arr.reshape(2, 3)
-print(newarr)
+arr_2d = arr.reshape(2, 5)
+print(arr_2d)
 
 print('Exercise 12: Create a 4x4 array and extract its first row and last column')
 
 arr2 = np.arange(1, 17).reshape(4, 4)
 print(arr2)
 row = arr2[0]
+# before the comma are rows (: means all), after the comma are columns (-1 means the last one)
 clm = arr2[:, -1]
 print("First Row:", row)
 print("Last Column:", clm)
 
-    
+print('\nBuilding a path with os.path.join')
+# os.path.join uses the right separator for the OS; pathlib is a modern alternative to os.path
+joined_path = os.path.join('test_folder', 'file.txt')
+print(joined_path)
+
+print('\nFixed seed for reproducible random data')
+random.seed(42)
+print(random.randint(1, 100))
