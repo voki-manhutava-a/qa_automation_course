@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# pytest cache
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE settings
+.vscode/
+.idea/
+.cursor/
+
+# macOS system files
+.DS_Store
+
+# Files and folders created by running the lesson scripts
+sampleJson.json
+new.txt
+old.txt
+temp.txt
+new_folder/
+test_folder/
+cleanup/
+
+# Git bundles
+*.bundle
